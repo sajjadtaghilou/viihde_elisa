@@ -8,9 +8,9 @@ import Button from '../../components/Button';
 
 const Channel = ()=>{
     const {id} = useParams();
-    const [live, setLive] = useState(null);//TODO loading 
+    const [live, setLive] = useState(null);
     
-    const [date,setDate] = useState(new Date().toISOString().substr(0,10));//TODO get correct day - local
+    const [date,setDate] = useState(new Date().toISOString().substr(0,10));
     useEffect(()=>{
         if(!live) return;
         const diff = live.endTimeUTC - Date.now()+5000;
