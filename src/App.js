@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import './reset.css';
 import './App.css';
 import axios from 'axios';
 import {BrowserRouter,Route,Switch} from 'react-router-dom';
@@ -8,7 +9,7 @@ import Channel from './pages/channel/Channel'
 function App() {
   return (
     <BrowserRouter>
-      <div className="App">
+      <div className="container">
         <Switch>
           <Route exact path="/" component={Main} />
           <Route path="/channel/:id" component={Channel} />

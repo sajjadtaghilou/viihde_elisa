@@ -3,11 +3,14 @@ import {useParams,Link} from 'react-router-dom';
 import axios from 'axios';
 import styled from 'styled-components';
 
+import ProgramsViewer from './components/ProgramsViewer';
+import Button from '../../components/Button';
+
 const Channel = ()=>{
     const {id} = useParams();
-    const [live, setLive] = useState(null);//TODO loading 
-    const [futurePrograms, setFuture] = useState([]);
-    const [date,setDate] = useState(new Date().toISOString().substr(0,10));//TODO get correct day - local
+    const [live, setLive] = useState(null);
+    
+    const [date,setDate] = useState(new Date().toISOString().substr(0,10));
     useEffect(()=>{
         if(!live) return;
         const diff = live.endTimeUTC - Date.now()+5000;
@@ -29,42 +32,29 @@ const Channel = ()=>{
             if(live) setLive(live);
         })
     },[]);
-    useEffect(()=>{
-        axios.get(`https://rest-api.elisaviihde.fi/rest/epg/schedule?channelId=${id}&date=${date}`).then(res => {
-            setFuture(res.data.schedule[0].programs);
-        })
-    },[date])
     return <div>
-        <input type="date"  defaultValue={date} onChange={e=>{ setDate(e.target.value) }}/>
-        <Link to="/"><button>Back</button></Link>
-        {live && `live program : ${live.name}`}
-        <p>--------------------</p>
-        <Container>
-        {futurePrograms.map(program => (
-          <Card>
-              <p>{program.name}</p>
-              {program.thumbnailUrl && <img src={program.thumbnailUrl}/>}
-          </Card>
-        ))}
-        </Container>
+        {live && <FlexContainer>
+            <span>live program : </span> 
+            <LiveTitle>{live.name}</LiveTitle>
+        </FlexContainer>
+        }
+        <FlexContainer>
+            <span>choose a date </span> <input type="date"  defaultValue={date} onChange={e=>{ setDate(e.target.value) }}/>
+            <Link to="/"><Button>Back</Button></Link>
+        </FlexContainer>
+        <ProgramsViewer id={id} date={date} />
     </div>
 }
 
 export default Channel;
 
-const Container = styled.div`
-    display:grid;
-    grid-template-columns:1fr 1fr 1fr 1fr 1fr;
-    grid-gap:10px;
+const FlexContainer = styled.div`
+    width:100%;
+    display:flex;
+    justify-content: center;
+    align-items:center;
 `
 
-
-const Card = styled.div`
-    border-radius:5px;
-    background:gold;
-    padding:10px;
-    & img {
-        width:70%;
-        border-radius:10px;
-    }
+const LiveTitle = styled.h3`
+    font-size:1.3rem;
 `
