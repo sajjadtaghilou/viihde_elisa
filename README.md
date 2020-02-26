@@ -1,7 +1,7 @@
 # viihde_elisa
 to start the App:
 ```
-cd summerwolt2020
+cd viihde_elisa
 npm install
 npm start
 ```
